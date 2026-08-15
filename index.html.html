@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EcoTank Studio — Measured Nature.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0B0C;
+    --ink:#F5F4F1;
+    --ink-soft:#9A9A96;
+    --accent:#E8C99A;
+    --line:rgba(245,244,241,0.14);
+    --card:#151516;
+    --moss:#8CA47A;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth; background:#0B0B0C;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .serif{ font-family:'Inter', sans-serif; font-weight:500; }
+  a{color:inherit; text-decoration:none;}
+  .container{ max-width:1240px; margin:0 auto; padding:0 32px; }
+  .eyebrow{
+    font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--accent); font-weight:600;
+  }
+
+  /* NAV */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,11,12,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 32px; max-width:1240px; margin:0 auto;
+  }
+  .logo{
+    font-family:'Inter', sans-serif; font-size:1.15rem; font-weight:700;
+    letter-spacing:0.01em;
+    display:flex; align-items:center; gap:2px;
+  }
+  .logo .o{ color:var(--accent); }
+  .nav-links{ display:flex; gap:38px; font-size:0.82rem; letter-spacing:0.04em; text-transform:uppercase; font-weight:500; }
+  .nav-links a{ opacity:0.75; transition:opacity .2s; }
+  .nav-links a:hover{ opacity:1; color:var(--accent); }
+  .nav-right{ display:flex; align-items:center; gap:22px; font-size:0.8rem; letter-spacing:0.05em; text-transform:uppercase; }
+  .icon-btn{ width:20px; height:14px; display:flex; flex-direction:column; justify-content:space-between; }
+  .icon-btn span{ display:block; height:1px; background:var(--ink); }
+
+  /* HERO */
+  .hero{ position:relative; padding-top:0; }
+  .hero-stage{
+    position:relative;
+    height:94vh; min-height:640px;
+    overflow:hidden;
+    background:linear-gradient(180deg, #100E0B 0%, #171410 55%, #1D1811 100%);
+    display:flex; align-items:center;
+  }
+  /* hero backdrop: user-supplied studio photograph */
+  .hero-photo{
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(90deg, rgba(16,14,11,0.55) 0%, rgba(16,14,11,0.05) 45%),
+      url('assets/hero-tank.png');
+    background-size:cover;
+    background-position:center 35%;
+  }
+  .hero-photo .vignette{
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse 90% 90% at 22% 55%, transparent 35%, rgba(0,0,0,0.45) 100%);
+  }
+  .hero-photo .blur-hand, .hero-photo .rim{ display:none; }
+  .hero-text{
+    position:relative; z-index:2;
+    padding-left:32px;
+    max-width:640px;
+  }
+  .hero-text .eyebrow{ margin-bottom:22px; color:var(--accent); }
+  .hero-headline{
+    font-family:'Inter', sans-serif;
+    font-size:clamp(2.8rem, 6vw, 5rem);
+    line-height:1.02;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    position:relative;
+    color:var(--ink);
+  }
+  .hero-headline .ghost{ display:none; }
+  .hero-headline em{ font-style:normal; color:var(--accent); }
+  .hero-sub{
+    margin-top:26px; font-size:1rem; color:rgba(245,244,241,0.65);
+    max-width:420px; font-family:'Inter';
+  }
+  .hero-actions{ margin-top:38px; display:flex; gap:16px; flex-wrap:wrap; }
+  .btn-primary{
+    background:var(--ink); color:var(--bg);
+    padding:16px 30px; font-size:0.84rem; letter-spacing:0.04em; font-weight:600;
+    display:inline-flex; align-items:center; gap:10px;
+    transition:background .2s ease, color .2s ease;
+  }
+  .btn-primary:hover{ background:var(--accent); color:#0B0B0C; }
+  .btn-outline{
+    padding:16px 28px; font-size:0.84rem; letter-spacing:0.04em; font-weight:600;
+    border:1px solid rgba(245,244,241,0.35); color:var(--ink);
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .btn-outline:hover{ border-color:var(--accent); color:var(--accent); }
+
+  /* MARQUEE STRIP */
+  .strip{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:16px 0; overflow:hidden; white-space:nowrap;
+  }
+  .strip-track{
+    display:inline-flex; gap:48px; font-family:'Inter', sans-serif; font-weight:500;
+    font-size:0.95rem; color:var(--ink-soft); animation:scroll 26s linear infinite;
+  }
+  .strip-track span{ opacity:0.6; }
+  @keyframes scroll{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+
+  /* SECTION HEAD */
+  section{ padding:100px 0; }
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    gap:40px; margin-bottom:56px; border-bottom:1px solid var(--line); padding-bottom:28px;
+  }
+  .section-head h2{ font-size:clamp(1.9rem, 3.2vw, 2.6rem); font-weight:400; }
+  .section-head p{ max-width:320px; color:var(--ink-soft); font-size:0.9rem; }
+
+  /* STEPS — numbered, hairline table feel */
+  .steps{ display:grid; grid-template-columns:repeat(5,1fr); }
+  .step{ padding:0 24px 0 0; border-right:1px solid var(--line); }
+  .step:last-child{ border-right:none; }
+  .step-num{ font-family:'Inter', sans-serif; font-weight:700; color:var(--accent); font-size:1.4rem; margin-bottom:16px; }
+  .step h3{ font-family:'Inter', sans-serif; font-weight:600; font-size:1.02rem; margin-bottom:10px; }
+  .step p{ font-size:0.84rem; color:var(--ink-soft); }
+
+  /* STYLE GRID — product-card feel */
+  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  .pcard{ background:var(--card); padding:34px 28px 30px; transition:background .25s ease; }
+  .pcard:hover{ background:#1D1D1F; }
+  .pthumb{ height:190px; margin-bottom:22px; position:relative; }
+  .pthumb.t1{ background:radial-gradient(circle at 40% 30%, #6B7E5F, #3A4A38); }
+  .pthumb.t2{ background:radial-gradient(circle at 40% 30%, #A9AE96, #667A5F); }
+  .pthumb.t3{ background:radial-gradient(circle at 40% 30%, #8A6A4B, #4A3A2A); }
+  .pthumb.t4{ background:radial-gradient(circle at 40% 30%, #5C6E52, #263123); }
+  .pthumb.t5{ background:radial-gradient(circle at 40% 30%, #7A9285, #33473D); }
+  .pthumb.t6{ background:radial-gradient(circle at 40% 30%, #2A2E22, #56694B); }
+  .pcard h3{ font-family:'Inter', sans-serif; font-size:1.02rem; font-weight:600; margin-bottom:6px; }
+  .pcard .price{ font-size:0.82rem; color:var(--accent); font-weight:500; }
+
+  /* EDITORIAL / WHY US */
+  .editorial{ display:grid; grid-template-columns:1fr 1fr; gap:70px; }
+  .editorial .lead{ font-family:'Inter', sans-serif; font-size:1.4rem; font-weight:600; line-height:1.35; margin-bottom:26px; }
+  .editorial p.body{ font-size:0.95rem; color:var(--ink-soft); margin-bottom:20px; max-width:460px; }
+  .feature-list{ display:flex; flex-direction:column; }
+  .feature-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:22px 0; border-bottom:1px solid var(--line);
+  }
+  .feature-row:first-child{ border-top:1px solid var(--line); }
+  .feature-row h4{ font-family:'Inter', sans-serif; font-weight:600; font-size:0.98rem; }
+  .feature-row span{ font-size:0.78rem; color:var(--ink-soft); text-align:right; max-width:220px; }
+
+  /* GALLERY */
+  .gallery{ display:grid; grid-template-columns:1.4fr 1fr 1fr; grid-template-rows:260px 260px; gap:2px; background:var(--line); border:1px solid var(--line); }
+  .gallery > div{ position:relative; overflow:hidden; }
+  .gallery > div:first-child{ grid-row:span 2; }
+  .g1{ background:radial-gradient(circle at 30% 20%, #6B7E5F, #253022); }
+  .g2{ background:radial-gradient(circle at 60% 40%, #8A6A4B, #3A2C1E); }
+  .g3{ background:radial-gradient(circle at 50% 50%, #17181A, #4A5C46); }
+  .g4{ background:radial-gradient(circle at 40% 30%, #A9AE96, #5C6E52); }
+  .gallery .cap{
+    position:absolute; left:20px; bottom:18px; color:var(--ink);
+    font-family:'Inter', sans-serif; font-weight:600; font-size:0.92rem;
+  }
+
+  /* FINAL CTA */
+  .final{ text-align:center; padding:140px 0; border-top:1px solid var(--line); }
+  .final .eyebrow{ display:block; margin-bottom:20px; }
+  .final h2{
+    font-family:'Inter', sans-serif; font-weight:700;
+    font-size:clamp(2.2rem, 4.6vw, 3.6rem); margin-bottom:34px;
+  }
+  .final h2 em{ font-style:normal; color:var(--accent); }
+
+  footer{ border-top:1px solid var(--line); padding:36px 0; }
+  .footer-row{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:14px; font-size:0.78rem; color:var(--ink-soft); }
+
+  @media (max-width:900px){
+    .nav-links{ display:none; }
+    .hero-stage{ height:auto; padding:60px 0 40px; flex-direction:column; align-items:flex-start; }
+    .hero-photo{ position:static; width:100%; height:260px; margin-top:34px; }
+    .hero-text{ padding-left:0; }
+    .steps{ grid-template-columns:repeat(2,1fr); row-gap:30px; }
+    .step{ border-right:none; }
+    .grid-3{ grid-template-columns:1fr 1fr; }
+    .editorial{ grid-template-columns:1fr; }
+    .gallery{ grid-template-columns:1fr 1fr; grid-template-rows:180px 180px 180px; }
+    .gallery > div:first-child{ grid-column:span 2; grid-row:auto; height:220px; }
+  }
+  @media (max-width:560px){
+    .grid-3{ grid-template-columns:1fr; }
+    .steps{ grid-template-columns:1fr; }
+    .gallery{ grid-template-columns:1fr; }
+    .gallery > div:first-child{ grid-column:auto; }
+    .section-head{ flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="#" class="logo"><span class="o">Eco</span>Tank</a>
+    <div class="nav-links">
+      <a href="#customize">Customize</a>
+      <a href="#styles">Shop</a>
+      <a href="#">Plants &amp; Animals</a>
+      <a href="#gallery">Inspiration</a>
+      <a href="#">About</a>
+    </div>
+    <div class="nav-right">
+      <span>Bag [0]</span>
+      <div class="icon-btn"><span></span><span></span></div>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="customize">
+    <div class="hero-stage">
+      <div class="container hero-text">
+        <p class="eyebrow">Custom-built ecosystems</p>
+        <h1 class="hero-headline">
+          Measured<br>
+          <em>Growth</em>
+        </h1>
+        <p class="hero-sub">Your ecosystem, your design. Choose plants, materials and structure — or let AI generate concepts, refined by our studio before it's ever built.</p>
+        <div class="hero-actions">
+          <a href="#" class="btn-primary">Customize My Tank →</a>
+          <a href="#styles" class="btn-outline">Explore Designs</a>
+        </div>
+      </div>
+      <div class="hero-photo">
+        <div class="blur-hand"></div>
+        <div class="rim"></div>
+        <div class="vignette"></div>
+      </div>
+    </div>
+    <div class="strip">
+      <div class="strip-track">
+        <span>Tropical Forest</span><span>—</span><span>Moss Garden</span><span>—</span><span>Rocky Habitat</span><span>—</span><span>Paludarium</span><span>—</span><span>Vivarium</span><span>—</span>
+        <span>Tropical Forest</span><span>—</span><span>Moss Garden</span><span>—</span><span>Rocky Habitat</span><span>—</span><span>Paludarium</span><span>—</span><span>Vivarium</span><span>—</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head">
+        <h2 class="serif">How it works</h2>
+        <p>Five steps from a blank tank to a living, balanced ecosystem — built the way you designed it.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-num">01</div><h3>Choose Your Tank</h3><p>Select a size and type as your foundation.</p></div>
+        <div class="step"><div class="step-num">02</div><h3>Pick Materials</h3><p>Plants, wood, rocks and substrate, all in one place.</p></div>
+        <div class="step"><div class="step-num">03</div><h3>Design or Generate</h3><p>Build it by hand, or let AI propose concepts.</p></div>
+        <div class="step"><div class="step-num">04</div><h3>Save &amp; Review</h3><p>Compare designs and check compatibility.</p></div>
+        <div class="step"><div class="step-num">05</div><h3>We Build It</h3><p>Confirm your quote — we bring it to life.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="styles" style="border-top:1px solid var(--line); background:#101011;">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="serif">Explore ecosystem styles</h2>
+        <p>Every style is a starting point, fully customizable once you enter the studio.</p>
+      </div>
+      <div class="grid-3">
+        <div class="pcard"><div class="pthumb t1"></div><h3>Tropical Forest</h3><span class="price">From RM 890</span></div>
+        <div class="pcard"><div class="pthumb t2"></div><h3>Moss Forest</h3><span class="price">From RM 760</span></div>
+        <div class="pcard"><div class="pthumb t3"></div><h3>Rocky Habitat</h3><span class="price">From RM 920</span></div>
+        <div class="pcard"><div class="pthumb t4"></div><h3>Jungle</h3><span class="price">From RM 1,040</span></div>
+        <div class="pcard"><div class="pthumb t5"></div><h3>Paludarium</h3><span class="price">From RM 1,180</span></div>
+        <div class="pcard"><div class="pthumb t6"></div><h3>Vivarium</h3><span class="price">From RM 980</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container editorial">
+      <div>
+        <p class="eyebrow" style="margin-bottom:20px; display:block;">Without compromise</p>
+        <p class="lead">Every tank is built by hand, from a material chosen first — the design follows its nature.</p>
+        <p class="body">We work in curated substrates, aquascaping wood and stone. Weights and balance are deliberate. Nothing is standardized for convenience.</p>
+        <p class="body">EcoTank Studio exists for those who want an ecosystem that means something — not decoration, but a living piece designed to last.</p>
+        <a href="#" class="btn-outline">View Collection</a>
+      </div>
+      <div class="feature-list">
+        <div class="feature-row"><h4 class="serif">Personalized Designs</h4><span>Shaped around your space &amp; style</span></div>
+        <div class="feature-row"><h4 class="serif">AI Assisted Design</h4><span>Multiple concepts, generated in seconds</span></div>
+        <div class="feature-row"><h4 class="serif">Expert Review</h4><span>Checked before it goes into production</span></div>
+        <div class="feature-row"><h4 class="serif">Compatibility Checking</h4><span>Flags mismatched plants &amp; environments</span></div>
+        <div class="feature-row"><h4 class="serif">High Quality Materials</h4><span>Sourced for longevity, not convenience</span></div>
+        <div class="feature-row"><h4 class="serif">After-sales Support</h4><span>Maintenance &amp; reorders, always available</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" style="border-top:1px solid var(--line);">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="serif">Customer creations</h2>
+        <p>Real tanks, designed and delivered.</p>
+      </div>
+      <div class="gallery">
+        <div class="g1"><span class="cap">Kelly's Tropical Tank</span></div>
+        <div class="g2"><span class="cap">Rocky Habitat Build</span></div>
+        <div class="g3"><span class="cap">Moss Garden Terrarium</span></div>
+        <div class="g4"><span class="cap">Paludarium Concept</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="container">
+      <span class="eyebrow">Ready when you are</span>
+      <h2>Build your own <em>ecosystem</em></h2>
+      <a href="#" class="btn-primary">Start Designing →</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer-row">
+    <span>© 2026 EcoTank Studio</span>
+    <span>Nature, designed by you.</span>
+  </div>
+</footer>
+
+</body>
+</html>
